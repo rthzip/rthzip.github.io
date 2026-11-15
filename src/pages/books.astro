@@ -1,10 +1,246 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const books = (await getCollection('books')).sort((a, b) => a.data.title.localeCompare(b.data.title, 'en'));
+const booksPerPage = 6;
+const pages = Array.from({ length: Math.ceil(books.length / booksPerPage) }, (_, index) => (
+  books.slice(index * booksPerPage, (index + 1) * booksPerPage)
+));
+const paginated = pages.length > 1;
 ---
 
-<BaseLayout title="Books" description="책을 기록하는 공간" showSidebar={false}>
-  <div class="prose">
-    <h1>Books</h1>
-    <p>아직 등록된 책이 없습니다.</p>
-  </div>
+<BaseLayout title="Books" description="책을 기록하는 공간" showSidebar={false} compact>
+  <section class="books-shelf" aria-labelledby="books-title">
+    <h1 class="section-title" id="books-title">Books</h1>
+    {pages.length > 0 ? (
+      <>
+        <div
+          class="books-track"
+          id="books-track"
+          role="group"
+          aria-label="책 목록"
+          tabindex={paginated ? '0' : undefined}
+        >
+          {pages.map((page, index) => (
+            <ul class="books-page" aria-label={`${index + 1}페이지`}>
+              {page.map(({ id, data: { title, author, cover } }) => (
+                <li class="book-card">
+                  <a href={`/books/${id}/`}>
+                    <Image
+                      class="book-cover"
+                      src={cover}
+                      alt=""
+                      width={480}
+                      widths={[240, 480]}
+                      sizes="(min-width: 36rem) 9rem, 7.34rem"
+                      format="webp"
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                    />
+                    <div class="book-details">
+                      <h2>{title}</h2>
+                      <p>{author}</p>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+        {paginated && (
+          <nav class="books-pagination" id="books-pagination" aria-label="책 목록 페이지" hidden>
+            <button type="button" data-previous aria-controls="books-track" aria-label="이전 페이지" disabled>
+              <span aria-hidden="true">←</span>
+            </button>
+            <span data-page-status role="status">1 / {pages.length}</span>
+            <button type="button" data-next aria-controls="books-track" aria-label="다음 페이지">
+              <span aria-hidden="true">→</span>
+            </button>
+          </nav>
+        )}
+      </>
+    ) : (
+      <p class="books-empty">아직 등록된 책이 없습니다.</p>
+    )}
+  </section>
 </BaseLayout>
+
+<style is:inline>
+  .books-shelf {
+    --books-columns: 2;
+    --books-gap: 0.8rem;
+    --book-card-height: clamp(8rem, calc((100svh - 17.75rem) / 3), 11rem);
+    --book-card-width: calc(var(--book-card-height) * 2 / 3);
+    max-width: calc(var(--books-columns) * var(--book-card-width) + (var(--books-columns) - 1) * var(--books-gap));
+    margin-inline: auto;
+  }
+
+  .books-track {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 0.85rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+  }
+
+  .books-track[data-enhanced] {
+    scrollbar-width: none;
+  }
+
+  .books-page {
+    display: grid;
+    flex: 0 0 100%;
+    min-width: 0;
+    grid-template-columns: repeat(var(--books-columns), minmax(0, 1fr));
+    gap: var(--books-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    scroll-snap-align: start;
+  }
+
+  .book-card {
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    background: var(--surface);
+  }
+
+  .book-card a {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: 100%;
+  }
+
+  .book-card a:focus-visible { outline-offset: -3px; }
+
+  .book-card:focus-within,
+  .book-card:hover { border-color: var(--accent); }
+
+  .book-card a:is(:hover, :focus-visible) h2 { color: var(--accent); }
+
+  .book-cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+
+  .book-details {
+    padding: 0.45rem 0.55rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .book-details h2 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 0.9375rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    text-wrap: wrap;
+  }
+
+  .book-details p,
+  .books-empty {
+    color: var(--ink-faint);
+    font-size: var(--step--1);
+  }
+
+  .book-details p {
+    margin: 0.15rem 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .books-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .books-pagination[hidden] { display: none; }
+
+  .books-pagination button {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.4rem;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    font-size: 1.15rem;
+    cursor: pointer;
+  }
+
+  .books-pagination button:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .books-pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  .books-pagination [data-page-status] {
+    min-width: 3.25rem;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 36rem) {
+    .books-shelf {
+      --books-columns: 3;
+      --book-card-height: clamp(9rem, calc((100svh - 17rem) / 2), 13.5rem);
+    }
+  }
+</style>
+
+<script>
+  const track = document.getElementById('books-track');
+  const pager = document.getElementById('books-pagination');
+  const previous = pager?.querySelector<HTMLButtonElement>('[data-previous]');
+  const next = pager?.querySelector<HTMLButtonElement>('[data-next]');
+  const status = pager?.querySelector<HTMLElement>('[data-page-status]');
+
+  if (track && pager && previous && next && status) {
+    const total = track.childElementCount;
+    let page = 0;
+
+    const update = () => {
+      page = Math.min(total - 1, Math.max(0, Math.round(track.scrollLeft / track.clientWidth)));
+      previous.disabled = page === 0;
+      next.disabled = page >= total - 1;
+      const label = `${page + 1} / ${total}`;
+      if (status.textContent !== label) status.textContent = label;
+    };
+
+    const go = (direction: number) => {
+      const destination = Math.min(total - 1, Math.max(0, page + direction));
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      track.scrollTo({ left: destination * track.clientWidth, behavior: reduceMotion ? 'instant' : 'smooth' });
+    };
+
+    previous.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    track.addEventListener('scroll', update, { passive: true });
+    track.dataset.enhanced = '';
+    pager.hidden = false;
+    update();
+  }
+</script>

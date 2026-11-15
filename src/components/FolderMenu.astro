@@ -1,0 +1,34 @@
+---
+import { folderHref, type Folder } from '../blog';
+
+interface Props {
+  folders: Folder[];
+  currentPath: string;
+  activePath?: string;
+  nested?: boolean;
+}
+
+const { folders, currentPath, activePath, nested = false } = Astro.props;
+---
+
+<ul class:list={{ 'folder-children': nested }}>
+  {folders.map((folder) => {
+    const href = folderHref(folder.path);
+    return (
+      <li>
+        <a
+          class:list={['nav-item', { child: nested, 'active-folder': folder.path.join('/') === activePath }]}
+          href={href}
+          aria-current={currentPath === decodeURIComponent(href) ? 'page' : undefined}
+        >
+          {!nested && <span class="folder-icon" aria-hidden="true"></span>}
+          <span>{folder.name}</span>
+          <span class="total" aria-label={`글 ${folder.posts.length}개`}>{folder.posts.length}</span>
+        </a>
+        {folder.children.length > 0 && (
+          <Astro.self folders={folder.children} {currentPath} {activePath} nested />
+        )}
+      </li>
+    );
+  })}
+</ul>

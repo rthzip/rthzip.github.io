@@ -2,7 +2,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 type Post = CollectionEntry<'blog'>;
 
-interface Folder {
+export interface Folder {
   name: string;
   path: string[];
   posts: Post[];
@@ -46,6 +46,12 @@ export function getFolders(posts: Post[]) {
   }
 
   const byName = (a: Folder, b: Folder) => a.name.localeCompare(b.name, 'ko');
-  for (const folder of roots) folder.children.sort(byName);
+  for (const folder of flattenFolders(roots)) {
+    folder.children.sort(byName);
+  }
   return roots.sort(byName);
+}
+
+export function flattenFolders(folders: Folder[]): Folder[] {
+  return folders.flatMap((folder) => [folder, ...flattenFolders(folder.children)]);
 }

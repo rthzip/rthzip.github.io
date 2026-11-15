@@ -1,19 +1,24 @@
 ---
 import { SITE } from '../consts';
 
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class="foot">
+<footer class:list={['foot', { 'compact-footer': compact }]}>
   <div class="shell inner">
-    <p class="who">{year} {SITE.author}</p>
+    <p class="who">{year} {SITE.handle}.</p>
     <ul class="links">
       <li><a class="text-link" href="/rss.xml">RSS</a></li>
     </ul>
   </div>
 </footer>
 
-<style>
+<style is:inline>
   .foot {
     margin-top: 5rem;
     border-top: 1px solid var(--rule);
@@ -21,7 +26,7 @@ const year = new Date().getFullYear();
     color: var(--ink-faint);
   }
 
-  .inner {
+  .foot .inner {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem 1.4rem;
@@ -29,15 +34,23 @@ const year = new Date().getFullYear();
     padding-block: 1.6rem 3rem;
   }
 
-  .who {
+  .foot .who {
     margin: 0;
   }
 
-  .links {
+  .foot .links {
     display: flex;
     gap: 1.2rem;
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .foot.compact-footer {
+    margin-top: 1rem;
+  }
+
+  .foot.compact-footer .inner {
+    padding-block: 0.75rem 1rem;
   }
 </style>

@@ -10,9 +10,10 @@ interface Props {
   ogType?: 'website' | 'article';
   activeCategory?: string[];
   showSidebar?: boolean;
+  compact?: boolean;
 }
 
-const { title, description, ogType, activeCategory, showSidebar = true } = Astro.props;
+const { title, description, ogType, activeCategory, showSidebar = true, compact = false } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,18 +24,18 @@ const { title, description, ogType, activeCategory, showSidebar = true } = Astro
   <body>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <Header />
-    <div class:list={['shell', 'frame', showSidebar ? 'with-sidebar' : 'standalone']}>
+    <div class:list={['shell', 'layout-frame', showSidebar ? 'with-sidebar' : 'standalone', { 'compact-frame': compact }]}>
       {showSidebar && <Sidebar {activeCategory} />}
       <main id="main" tabindex="-1">
         <slot />
       </main>
     </div>
-    <Footer />
+    <Footer {compact} />
   </body>
 </html>
 
-<style>
-  .frame {
+<style is:inline>
+  .layout-frame {
     flex: 1;
     display: grid;
     align-items: start;
@@ -42,28 +43,32 @@ const { title, description, ogType, activeCategory, showSidebar = true } = Astro
     padding-top: clamp(1.25rem, 4vw, 3.5rem);
   }
 
-  main {
+  .layout-frame > main {
     min-width: 0;
   }
 
-  .standalone main {
+  .layout-frame.compact-frame {
+    padding-top: 1.25rem;
+  }
+
+  .layout-frame.standalone > main {
     width: 100%;
     max-width: 44rem;
     margin-inline: auto;
   }
 
-  .with-sidebar main {
+  .layout-frame.with-sidebar > main {
     border-top: 1px solid var(--rule);
     padding-top: 1.65rem;
   }
 
   @media (min-width: 52rem) {
-    .with-sidebar {
+    .layout-frame.with-sidebar {
       grid-template-columns: minmax(13.5rem, 15rem) minmax(0, 1fr);
       gap: clamp(2rem, 5vw, 4.5rem);
     }
 
-    .with-sidebar main {
+    .layout-frame.with-sidebar > main {
       border-top: 0;
       padding-top: 0;
     }

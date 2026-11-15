@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/post-content.css';
+
+export async function getStaticPaths() {
+  return (await getCollection('books')).map((book) => ({
+    params: { slug: book.id },
+    props: { book },
+  }));
+}
+
+interface Props {
+  book: CollectionEntry<'books'>;
+}
+
+const { book } = Astro.props;
+const { title, author, description, cover } = book.data;
+const { Content } = await render(book);
+---
+
+<BaseLayout title={title} description={description} ogType="article" showSidebar={false}>
+  <article class="book-post">
+    <a class="book-post-back text-link" href="/books/">모든 책</a>
+    <header class="book-post-head">
+      <Image class="book-post-cover" src={cover} alt="" width={240} format="webp" />
+      <div>
+        <h1 class="section-title">{title}</h1>
+        <p class="book-post-author">{author}</p>
+        <p class="book-post-description">{description}</p>
+      </div>
+    </header>
+    <div class="prose post-content">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .book-post {
+    max-width: var(--measure);
+    margin-inline: auto;
+  }
+
+  .book-post-back {
+    display: inline-block;
+    margin-bottom: 1.2rem;
+    font-size: var(--step--1);
+  }
+
+  .book-post-head {
+    display: grid;
+    grid-template-columns: clamp(4.5rem, 18%, 7rem) minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .book-post-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.3rem;
+  }
+
+  .book-post-author {
+    margin: 0.25rem 0 0;
+    color: var(--ink-faint);
+    font-size: var(--step--1);
+  }
+
+  .book-post-description {
+    margin: 0.55rem 0 0;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+</style>

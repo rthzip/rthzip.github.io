@@ -1,13 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { folderHref, folderSlug, getFolders, getPublishedPosts } from '../../blog';
+import { flattenFolders, folderHref, folderSlug, getFolders, getPublishedPosts } from '../../blog';
 import PostList from '../../components/PostList.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
   const folders = getFolders(await getPublishedPosts());
 
-  return folders.flatMap((root) => [root, ...root.children]).map(({ name, path, posts }) => ({
+  return flattenFolders(folders).map(({ name, path, posts }) => ({
     params: { category: folderSlug(path) },
     props: { name, path, posts },
   }));
@@ -20,12 +20,13 @@ interface Props {
 }
 
 const { name, path, posts } = Astro.props;
-const parent = path.length === 2 ? path[0] : undefined;
 const categoryTitle = path.join(' / ');
 ---
 
 <BaseLayout title={categoryTitle} description={`${categoryTitle} 폴더의 글`} activeCategory={path}>
-  <h1 class="category-title" title={categoryTitle}>{parent && <><a href={folderHref([parent])}>{parent}</a>{' / '}</>}{name}</h1>
+  <h1 class="category-title" title={categoryTitle}>{path.slice(0, -1).map((parent, index) => (
+    <><a href={folderHref(path.slice(0, index + 1))}>{parent}</a>{' / '}</>
+  ))}{name}</h1>
   <PostList posts={posts} />
 </BaseLayout>
 
