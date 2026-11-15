@@ -1,0 +1,218 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  searchable?: boolean;
+  emptyMessage?: string;
+}
+
+const { posts, searchable = false, emptyMessage = '아직 쓴 글이 없습니다.' } = Astro.props;
+
+const haystack = (post: CollectionEntry<'blog'>) =>
+  [post.data.title, post.data.description, ...post.data.tags].join(' ').toLowerCase();
+---
+
+{
+  searchable && posts.length > 0 && (
+    <search class="finder">
+      <label class="field">
+        <span class="hint">글 검색</span>
+        <input
+          type="search"
+          data-post-search
+          autocomplete="off"
+          placeholder="제목, 설명, 태그로 찾기"
+          aria-describedby="search-count"
+        />
+      </label>
+      <p class="count" id="search-count" role="status" data-search-count />
+    </search>
+  )
+}
+
+{
+  posts.length === 0 ? (
+    <p class="void">{emptyMessage}</p>
+  ) : (
+    <>
+      <ul class="rows" data-post-rows>
+        {posts.map((post) => (
+          <li class="row" data-haystack={haystack(post)}>
+            <span class="date">
+              <FormattedDate date={post.data.pubDate} />
+            </span>
+            <div class="main">
+              <a class="title" href={`/posts/${post.id}/`}>
+                {post.data.title}
+              </a>
+              <p class="desc">{post.data.description}</p>
+              {post.data.tags.length > 0 && (
+                <ul class="tag-row">
+                  {post.data.tags.map((tag) => (
+                    <li>
+                      <a href={`/tags/${tag}/`}>{tag}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="void" data-search-empty hidden>
+        검색어와 맞는 글이 없습니다. 태그 이름이나 더 짧은 낱말로 찾아보세요.
+      </p>
+    </>
+  )
+}
+
+<style>
+  .finder {
+    display: block;
+    margin-bottom: 2.6rem;
+  }
+
+  .field {
+    display: block;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .field:focus-within {
+    border-bottom-color: var(--seal);
+  }
+
+  .hint {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    margin-bottom: 0.1rem;
+  }
+
+  input {
+    width: 100%;
+    background: none;
+    border: 0;
+    padding: 0 0 0.45rem;
+    font: inherit;
+    font-size: var(--step-2);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    caret-color: var(--seal);
+  }
+
+  input::placeholder {
+    color: var(--ink-faint);
+    font-weight: 300;
+  }
+
+  input:focus {
+    outline: none;
+  }
+
+  input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  .count {
+    margin: 0.5rem 0 0;
+    min-height: 1.5em;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: grid;
+    gap: 0.1rem 1.5rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .row[hidden] {
+    display: none;
+  }
+
+  .date {
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    padding-top: 0.32rem;
+  }
+
+  .title {
+    font-size: var(--step-1);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    display: inline-block;
+  }
+
+  .title:hover {
+    color: var(--seal);
+  }
+
+  .desc {
+    margin: 0.25rem 0 0;
+    color: var(--ink-soft);
+    max-width: var(--measure);
+  }
+
+  .tag-row {
+    margin: 0.55rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .void {
+    padding-block: 2rem;
+    color: var(--ink-faint);
+  }
+
+  @media (min-width: 44rem) {
+    .row {
+      grid-template-columns: var(--date-col) 1fr;
+    }
+  }
+</style>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('[data-post-search]');
+  const list = document.querySelector<HTMLElement>('[data-post-rows]');
+  const count = document.querySelector<HTMLElement>('[data-search-count]');
+  const empty = document.querySelector<HTMLElement>('[data-search-empty]');
+
+  if (input && list) {
+    const rows = Array.from(list.querySelectorAll<HTMLElement>('.row'));
+
+    const filter = () => {
+      const query = input.value.trim().toLowerCase();
+      const words = query.split(/\s+/).filter(Boolean);
+      let shown = 0;
+
+      for (const row of rows) {
+        const hay = row.dataset.haystack ?? '';
+        const match = words.every((word) => hay.includes(word));
+        row.hidden = !match;
+        if (match) shown += 1;
+      }
+
+      if (empty) empty.hidden = shown > 0;
+      if (count) count.textContent = words.length === 0 ? '' : `${shown}개의 글`;
+    };
+
+    input.addEventListener('input', filter);
+    input.addEventListener('search', filter);
+    filter();
+  }
+</script>

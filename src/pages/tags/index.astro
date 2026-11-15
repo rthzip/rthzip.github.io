@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+const counts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+}
+
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+const largest = tags.length > 0 ? tags[0][1] : 1;
+---
+
+<BaseLayout title="태그" description="주제별로 모아 둔 글 목록">
+  <h1 class="page-title">태그</h1>
+  {
+    tags.length === 0 ? (
+      <p class="void">아직 태그가 붙은 글이 없습니다.</p>
+    ) : (
+      <ul class="tags">
+        {tags.map(([tag, count]) => (
+          <li>
+            <a href={`/tags/${tag}/`}>
+              <span class="name">{tag}</span>
+              <span class="bar" aria-hidden="true" style={`--fill:${(count / largest) * 100}%`} />
+              <span class="count">{count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: var(--step-3);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 2.4rem;
+  }
+
+  .tags {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: var(--measure);
+  }
+
+  .tags a {
+    display: grid;
+    grid-template-columns: minmax(6rem, auto) 1fr 2.5rem;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.7rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .tags li:last-child a {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .name {
+    font-weight: 500;
+  }
+
+  .bar {
+    height: 2px;
+    background: var(--rule);
+  }
+
+  .bar::before {
+    content: '';
+    display: block;
+    height: 100%;
+    width: var(--fill);
+    background: var(--celadon);
+  }
+
+  .count {
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    text-align: right;
+  }
+
+  .tags a:hover .name {
+    color: var(--seal);
+  }
+
+  .tags a:hover .bar::before {
+    background: var(--seal);
+  }
+
+  .void {
+    color: var(--ink-faint);
+  }
+</style>

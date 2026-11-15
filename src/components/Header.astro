@@ -1,0 +1,70 @@
+---
+import { SITE, NAV } from '../consts';
+import ThemeToggle from './ThemeToggle.astro';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="masthead">
+  <div class="shell bar">
+    <a href="/" class="wordmark" aria-current={path === '/' ? 'page' : undefined}>{SITE.title}</a>
+    <nav aria-label="주요">
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+</header>
+
+<style>
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .bar {
+    display: flex;
+    align-items: baseline;
+    gap: 1.1rem;
+    padding-block: 1.3rem;
+  }
+
+  .wordmark {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-right: auto;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--step--1);
+  }
+
+  nav a {
+    color: var(--ink-soft);
+    padding-bottom: 0.2rem;
+    border-bottom: 1.5px solid transparent;
+  }
+
+  nav a:hover {
+    color: var(--ink);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--ink);
+    border-bottom-color: var(--seal);
+  }
+</style>

@@ -1,0 +1,210 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const ordered = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return ordered.map((post, index) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      newer: ordered[index - 1] ?? null,
+      older: ordered[index + 1] ?? null,
+    },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  newer: CollectionEntry<'blog'> | null;
+  older: CollectionEntry<'blog'> | null;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+const sections = headings.filter((heading) => heading.depth === 2);
+---
+
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
+  <article>
+    <header class="head">
+      <h1>{post.data.title}</h1>
+      <p class="desc">{post.data.description}</p>
+      <p class="when">
+        <FormattedDate date={post.data.pubDate} />
+        {post.data.updatedDate && <span class="revised">{' '}고침 <FormattedDate date={post.data.updatedDate} /></span>}
+      </p>
+      {
+        post.data.tags.length > 0 && (
+          <ul class="tag-row">
+            {post.data.tags.map((tag) => (
+              <li>
+                <a href={`/tags/${tag}/`}>{tag}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </header>
+
+    {
+      sections.length >= 3 && (
+        <nav class="toc" aria-label="목차">
+          <p class="toc-title">목차</p>
+          <ol>
+            {sections.map((section) => (
+              <li>
+                <a href={`#${section.slug}`}>{section.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+
+  {
+    (newer || older) && (
+      <nav class="around" aria-label="다른 글">
+        {older && (
+          <a class="step" href={`/posts/${older.id}/`}>
+            <span class="step-label">이전 글</span>
+            <span class="step-title">{older.data.title}</span>
+          </a>
+        )}
+        {newer && (
+          <a class="step next" href={`/posts/${newer.id}/`}>
+            <span class="step-label">다음 글</span>
+            <span class="step-title">{newer.data.title}</span>
+          </a>
+        )}
+      </nav>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .head {
+    max-width: var(--measure);
+    margin-bottom: 2.6rem;
+  }
+
+  h1 {
+    font-size: var(--step-3);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .desc {
+    margin: 0.7rem 0 0;
+    font-size: var(--step-1);
+    font-weight: 300;
+    color: var(--ink-soft);
+  }
+
+  .when {
+    margin: 1.4rem 0 0;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .revised::before {
+    content: '';
+    display: inline-block;
+    width: 1.6rem;
+    border-top: 1px solid var(--rule);
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+
+  .tag-row {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .toc {
+    max-width: var(--measure);
+    margin-bottom: 2.8rem;
+    padding: 1rem 1.2rem;
+    background: var(--paper-sunk);
+    border-left: 2px solid var(--celadon);
+    font-size: var(--step--1);
+  }
+
+  .toc-title {
+    margin: 0 0 0.4rem;
+    color: var(--ink-faint);
+  }
+
+  .toc ol {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--celadon);
+  }
+
+  .toc a {
+    color: var(--ink-soft);
+  }
+
+  .toc a:hover {
+    color: var(--seal);
+  }
+
+  .around {
+    display: grid;
+    gap: 1px;
+    margin-top: 4rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .step {
+    display: block;
+    padding: 1.3rem 0;
+  }
+
+  .step + .step {
+    border-top: 1px solid var(--rule);
+  }
+
+  .step-label {
+    display: block;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .step-title {
+    display: block;
+    margin-top: 0.15rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .step:hover .step-title {
+    color: var(--seal);
+  }
+
+  @media (min-width: 44rem) {
+    .around {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 2rem;
+    }
+
+    .step + .step {
+      border-top: 0;
+    }
+
+    .next {
+      grid-column: 2;
+      text-align: right;
+    }
+  }
+</style>

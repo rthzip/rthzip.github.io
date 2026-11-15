@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../consts';
+---
+
+<BaseLayout title="소개" description="sejeong park 소개">
+  <article class="prose">
+    <h1>소개</h1>
+    <p>
+      일상에서 배우고 해 본 것들을 기록하는 개인 블로그입니다.
+    </p>
+
+    <h2>요즘 관심사</h2>
+    <ul>
+      <li>집에서 커피 내리기</li>
+      <li>주말 산행</li>
+    </ul>
+
+    <h2>연락</h2>
+    <p>
+      <a class="seal-link" href={SITE.github}>GitHub</a>에서 찾을 수 있습니다.
+    </p>
+  </article>
+</BaseLayout>

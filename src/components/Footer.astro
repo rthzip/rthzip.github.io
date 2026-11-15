@@ -1,0 +1,44 @@
+---
+import { SITE } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="foot">
+  <div class="shell inner">
+    <p class="who">{year} {SITE.author}</p>
+    <ul class="links">
+      <li><a class="seal-link" href="https://github.com/sejeong-park">GitHub</a></li>
+      <li><a class="seal-link" href="/rss.xml">RSS</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    margin-top: 5rem;
+    border-top: 1px solid var(--rule);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.4rem;
+    justify-content: space-between;
+    padding-block: 1.6rem 3rem;
+  }
+
+  .who {
+    margin: 0;
+  }
+
+  .links {
+    display: flex;
+    gap: 1.2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>
