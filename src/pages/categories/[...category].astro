@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { folderHref, folderSlug, getFolders, getPublishedPosts } from '../../blog';
+import PostList from '../../components/PostList.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const folders = getFolders(await getPublishedPosts());
+
+  return folders.flatMap((root) => [root, ...root.children]).map(({ name, path, posts }) => ({
+    params: { category: folderSlug(path) },
+    props: { name, path, posts },
+  }));
+}
+
+interface Props {
+  name: string;
+  path: string[];
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { name, path, posts } = Astro.props;
+const parent = path.length === 2 ? path[0] : undefined;
+const categoryTitle = path.join(' / ');
+---
+
+<BaseLayout title={categoryTitle} description={`${categoryTitle} 폴더의 글`} activeCategory={path}>
+  <h1 class="category-title" title={categoryTitle}>{parent && <><a href={folderHref([parent])}>{parent}</a>{' / '}</>}{name}</h1>
+  <PostList posts={posts} />
+</BaseLayout>
+
+<style>
+  .category-title {
+    margin-bottom: 0.5rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .category-title a:hover { color: var(--accent); }
+  .category-title a:focus-visible { outline-offset: -1px; }
+</style>

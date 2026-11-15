@@ -2,6 +2,7 @@
 title: '주말 반나절 산행 준비물'
 description: '왕복 3~4시간짜리 낮은 산에 갈 때 챙기는 것들.'
 pubDate: 2026-11-08
+category: ['일상', '산행']
 tags: ['hiking', 'checklist']
 ---
 

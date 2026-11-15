@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://sejeong-park.github.io',
+  site: 'https://rthzip.github.io',
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {

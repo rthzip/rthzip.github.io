@@ -2,19 +2,23 @@
 import { SITE, NAV } from '../consts';
 import ThemeToggle from './ThemeToggle.astro';
 
-const path = Astro.url.pathname;
-const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const current = (href: string) => {
+  if (path === href) return 'page';
+  const inSection = href === '/' ? /^\/(posts|categories)\//.test(path) : path.startsWith(href);
+  return inSection ? 'location' : undefined;
+};
 ---
 
 <header class="masthead">
   <div class="shell bar">
-    <a href="/" class="wordmark" aria-current={path === '/' ? 'page' : undefined}>{SITE.title}</a>
+    <a href="/" class="wordmark" aria-current={path === '/' ? 'page' : undefined}>{SITE.handle}<span aria-hidden="true">.</span></a>
     <nav aria-label="주요">
       <ul>
         {
           NAV.map((item) => (
             <li>
-              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+              <a href={item.href} aria-current={current(item.href)}>
                 {item.label}
               </a>
             </li>
@@ -33,20 +37,22 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
 
   .bar {
     display: flex;
-    align-items: baseline;
-    gap: 1.1rem;
-    padding-block: 1.3rem;
+    align-items: center;
+    gap: clamp(0.65rem, 3vw, 1.75rem);
+    padding-block: 0.9rem;
   }
 
   .wordmark {
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font: 700 1.2rem var(--font-sans);
+    letter-spacing: -0.03em;
     margin-right: auto;
   }
 
+  .wordmark span { color: var(--accent); }
+
   nav ul {
     display: flex;
-    gap: 1.1rem;
+    gap: clamp(0.65rem, 2.5vw, 1.1rem);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -63,8 +69,8 @@ const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWi
     color: var(--ink);
   }
 
-  nav a[aria-current='page'] {
+  nav a[aria-current] {
     color: var(--ink);
-    border-bottom-color: var(--seal);
+    border-bottom-color: var(--accent);
   }
 </style>

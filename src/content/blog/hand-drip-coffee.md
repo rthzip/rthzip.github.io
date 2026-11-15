@@ -2,6 +2,7 @@
 title: '집에서 핸드드립 커피 내리기'
 description: '원두 15g, 물 250ml로 시작하는 핸드드립 기본 레시피.'
 pubDate: 2026-11-15
+category: ['일상', '커피']
 tags: ['coffee', 'recipe']
 ---
 

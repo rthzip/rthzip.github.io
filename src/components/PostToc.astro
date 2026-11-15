@@ -1,0 +1,33 @@
+---
+interface Props {
+  sections: { slug: string; text: string }[];
+}
+
+const { sections } = Astro.props;
+---
+
+<nav aria-label="목차">
+  <ol>
+    {sections.map(({ slug, text }) => <li><a href={`#${slug}`}>{text}</a></li>)}
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--step--1);
+    line-height: 1.4;
+  }
+
+  a { color: var(--ink-soft); }
+
+  a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+  }
+</style>

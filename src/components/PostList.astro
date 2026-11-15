@@ -71,57 +71,50 @@ const haystack = (post: CollectionEntry<'blog'>) =>
 <style>
   .finder {
     display: block;
-    margin-bottom: 2.6rem;
+    margin-bottom: 0.7rem;
   }
 
   .field {
     display: block;
-    border-bottom: 2px solid var(--ink);
-  }
-
-  .field:focus-within {
-    border-bottom-color: var(--seal);
+    position: relative;
   }
 
   .hint {
-    display: block;
-    font-size: var(--step--1);
-    color: var(--ink-faint);
-    margin-bottom: 0.1rem;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
   }
 
   input {
     width: 100%;
-    background: none;
-    border: 0;
-    padding: 0 0 0.45rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 0.25rem;
+    padding: 0.55rem 0.75rem;
     font: inherit;
-    font-size: var(--step-2);
-    font-weight: 300;
-    letter-spacing: -0.02em;
+    font-size: var(--step--1);
     color: var(--ink);
-    caret-color: var(--seal);
+    caret-color: var(--accent);
   }
 
   input::placeholder {
     color: var(--ink-faint);
-    font-weight: 300;
   }
 
-  input:focus {
+  input:focus-visible {
+    border-color: var(--accent);
     outline: none;
-  }
-
-  input::-webkit-search-cancel-button {
-    -webkit-appearance: none;
   }
 
   .count {
     margin: 0.5rem 0 0;
-    min-height: 1.5em;
     font-size: var(--step--1);
     color: var(--ink-faint);
   }
+
+  .count:empty { margin: 0; }
 
   .rows {
     margin: 0;
@@ -131,13 +124,13 @@ const haystack = (post: CollectionEntry<'blog'>) =>
 
   .row {
     display: grid;
-    gap: 0.1rem 1.5rem;
-    padding-block: 1.5rem;
-    border-top: 1px solid var(--rule);
+    align-items: start;
+    gap: 0.25rem 1.5rem;
+    padding-block: 1.25rem;
   }
 
-  .row:last-child {
-    border-bottom: 1px solid var(--rule);
+  .row:not([hidden]) ~ .row:not([hidden]) {
+    border-top: 1px solid var(--rule);
   }
 
   .row[hidden] {
@@ -145,9 +138,9 @@ const haystack = (post: CollectionEntry<'blog'>) =>
   }
 
   .date {
-    font-size: var(--step--1);
+    font: 0.75rem/1.7 var(--font-sans);
+    font-variant-numeric: tabular-nums;
     color: var(--ink-faint);
-    padding-top: 0.32rem;
   }
 
   .title {
@@ -159,30 +152,43 @@ const haystack = (post: CollectionEntry<'blog'>) =>
   }
 
   .title:hover {
-    color: var(--seal);
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
   }
 
   .desc {
     margin: 0.25rem 0 0;
     color: var(--ink-soft);
     max-width: var(--measure);
+    font-size: 0.95rem;
   }
 
   .tag-row {
-    margin: 0.55rem 0 0;
+    gap: 0.25rem 0.75rem;
+    margin: 0.45rem 0 0;
     padding: 0;
     list-style: none;
   }
+
+  .tag-row a {
+    font-size: 0.78rem;
+  }
+
+  .tag-row a::before { content: '#'; margin-right: 0.1rem; }
 
   .void {
     padding-block: 2rem;
     color: var(--ink-faint);
   }
 
-  @media (min-width: 44rem) {
+  @media (min-width: 66rem) {
     .row {
-      grid-template-columns: var(--date-col) 1fr;
+      grid-template-columns: minmax(0, 1fr) auto;
     }
+
+    .date { grid-column: 2; grid-row: 1; padding-top: 0.35rem; }
+    .main { grid-column: 1; grid-row: 1; }
   }
 </style>
 

@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
+import PostToc from '../../components/PostToc.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -28,47 +29,49 @@ const { Content, headings } = await render(post);
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
-  <article>
-    <header class="head">
-      <h1>{post.data.title}</h1>
-      <p class="desc">{post.data.description}</p>
-      <p class="when">
-        <FormattedDate date={post.data.pubDate} />
-        {post.data.updatedDate && <span class="revised">{' '}고침 <FormattedDate date={post.data.updatedDate} /></span>}
-      </p>
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article" activeCategory={post.data.category}>
+  <div class="post-frame">
+    <article class:list={['post', { 'has-toc': sections.length > 0 }]}>
+      <header class="head">
+        <h1>{post.data.title}</h1>
+        <p class="desc">{post.data.description}</p>
+        <p class="when">
+          <FormattedDate date={post.data.pubDate} />
+          {post.data.updatedDate && <span class="revised">{' '}고침 <FormattedDate date={post.data.updatedDate} /></span>}
+        </p>
+        {
+          post.data.tags.length > 0 && (
+            <ul class="tag-row">
+              {post.data.tags.map((tag) => (
+                <li>
+                  <a href={`/tags/${tag}/`}>{tag}</a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
       {
-        post.data.tags.length > 0 && (
-          <ul class="tag-row">
-            {post.data.tags.map((tag) => (
-              <li>
-                <a href={`/tags/${tag}/`}>{tag}</a>
-              </li>
-            ))}
-          </ul>
+        sections.length > 0 && (
+          <>
+            <div class="toc-side">
+              <p class="toc-title">목차</p>
+              <PostToc {sections} />
+            </div>
+            <details class="toc-mobile">
+              <summary>목차</summary>
+              <PostToc {sections} />
+            </details>
+          </>
         )
       }
-    </header>
 
-    {
-      sections.length >= 3 && (
-        <nav class="toc" aria-label="목차">
-          <p class="toc-title">목차</p>
-          <ol>
-            {sections.map((section) => (
-              <li>
-                <a href={`#${section.slug}`}>{section.text}</a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      )
-    }
-
-    <div class="prose">
-      <Content />
-    </div>
-  </article>
+      <div class="prose post-content">
+        <Content />
+      </div>
+    </article>
+  </div>
 
   {
     (newer || older) && (
@@ -91,21 +94,24 @@ const sections = headings.filter((heading) => heading.depth === 2);
 </BaseLayout>
 
 <style>
-  .head {
-    max-width: var(--measure);
-    margin-bottom: 2.6rem;
+  .post-frame {
+    container-type: inline-size;
   }
 
-  h1 {
-    font-size: var(--step-3);
+  .head {
+    max-width: var(--measure);
+    margin-bottom: 2.2rem;
+  }
+
+  .head h1 {
+    font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
     font-weight: 700;
     letter-spacing: -0.025em;
   }
 
   .desc {
     margin: 0.7rem 0 0;
-    font-size: var(--step-1);
-    font-weight: 300;
+    font-size: 1rem;
     color: var(--ink-soft);
   }
 
@@ -130,32 +136,106 @@ const sections = headings.filter((heading) => heading.depth === 2);
     list-style: none;
   }
 
-  .toc {
+  .toc-side {
+    display: none;
+  }
+
+  .toc-mobile {
     max-width: var(--measure);
-    margin-bottom: 2.8rem;
-    padding: 1rem 1.2rem;
-    background: var(--paper-sunk);
-    border-left: 2px solid var(--celadon);
+    margin-bottom: 1.5rem;
+    padding-block: 0.45rem;
+    border-block: 1px solid var(--rule);
+  }
+
+  .toc-mobile summary {
+    cursor: pointer;
+    color: var(--ink-soft);
     font-size: var(--step--1);
   }
 
+  .toc-mobile[open] summary {
+    margin-bottom: 0.6rem;
+  }
+
   .toc-title {
-    margin: 0 0 0.4rem;
+    margin: 0 0 0.55rem;
     color: var(--ink-faint);
+    font-size: var(--step--1);
+    font-weight: 600;
   }
 
-  .toc ol {
-    margin: 0;
-    padding-left: 1.2rem;
-    color: var(--celadon);
+  .post-content {
+    font-size: 0.9375rem;
+    line-height: 1.75;
   }
 
-  .toc a {
-    color: var(--ink-soft);
+  .post-content :global(:is(h1, h2, h3, h4, h5, h6)) {
+    margin: 1.65em 0 0;
+    font-weight: 650;
+    line-height: 1.35;
+    scroll-margin-block-start: 1.25rem;
   }
 
-  .toc a:hover {
-    color: var(--seal);
+  .post-content :global(h1) { font-size: 1.375rem; }
+
+  .post-content :global(h2) {
+    margin-top: 2em;
+    padding-top: 0.7rem;
+    font-size: 1.25rem;
+  }
+
+  .post-content :global(h3) { font-size: 1.0625rem; }
+  .post-content :global(h4) { font-size: 0.9375rem; }
+  .post-content :global(h5) { font-size: 0.875rem; }
+  .post-content :global(h6) { font-size: 0.8125rem; color: var(--ink-soft); }
+
+  .post-content > :global(:first-child) { margin-top: 0; }
+
+  .post-content :global(:is(h1, h2, h3, h4, h5, h6) + *) {
+    margin-top: 0.65rem;
+  }
+
+  .post-content :global(hr) { margin-block: 2.625rem 2.1875rem; }
+  .post-content :global(img) {
+    width: 100%;
+    border-radius: 10%;
+  }
+
+  .post-content :global(mark) {
+    background-color: var(--highlight);
+    color: inherit;
+  }
+
+  .post-content :global(table) {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+
+  .post-content :global(pre) { font-size: 0.78125rem; }
+  .post-content :global(pre > code) { font-size: inherit; }
+
+  @container (min-width: 29rem) {
+    .post.has-toc {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) clamp(7rem, 23cqi, 10.75rem);
+      column-gap: clamp(1rem, 4cqi, 2rem);
+    }
+
+    .head { grid-area: 1 / 1; }
+    .prose { grid-area: 2 / 1; }
+    .toc-mobile { display: none; }
+
+    .toc-side {
+      display: block;
+      grid-area: 1 / 2 / 3;
+      align-self: start;
+      position: sticky;
+      inset-block-start: 1.5rem;
+      max-height: calc(100dvh - 3rem);
+      overflow-y: auto;
+      padding: 0.15rem 0.25rem 0.3rem 0.85rem;
+      border-left: 1px solid var(--rule);
+    }
   }
 
   .around {
@@ -189,7 +269,7 @@ const sections = headings.filter((heading) => heading.depth === 2);
   }
 
   .step:hover .step-title {
-    color: var(--seal);
+    color: var(--accent);
   }
 
   @media (min-width: 44rem) {

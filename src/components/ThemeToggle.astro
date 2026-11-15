@@ -2,54 +2,70 @@
 
 ---
 
-<button type="button" class="toggle" data-theme-toggle aria-pressed="false">
-  <span class="glyph" aria-hidden="true"></span>
-  <span class="label">다크 모드</span>
+<button type="button" class="toggle" data-theme-toggle aria-label="다크 모드로 전환">
+  <span class="moon" aria-hidden="true"></span>
+  <span class="sun" aria-hidden="true"></span>
 </button>
 
 <style>
   .toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+    display: grid;
+    place-items: center;
+    flex: 0 0 2rem;
+    width: 2rem;
+    height: 2rem;
     background: none;
     border: 0;
+    border-radius: 0.3rem;
     padding: 0;
-    font: inherit;
-    font-size: var(--step--1);
-    color: var(--ink-faint);
+    color: var(--ink-soft);
     cursor: pointer;
   }
 
   .toggle:hover {
-    color: var(--seal);
+    background: var(--surface);
+    color: var(--ink);
   }
 
-  .glyph {
-    width: 0.72rem;
-    height: 0.72rem;
+  .moon {
+    width: 0.95rem;
+    height: 0.95rem;
     border-radius: 50%;
-    border: 1.5px solid currentColor;
-    background: linear-gradient(to right, currentColor 50%, transparent 50%);
+    background: currentColor;
+    mask-image: radial-gradient(circle at 71% 31%, transparent 48%, black 52%);
   }
 
-  .label {
-    /* 좁은 화면에서는 글리프만 남긴다. */
+  .sun {
+    position: relative;
+    display: none;
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  .sun::before,
+  .sun::after {
+    content: '';
     position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+    border-radius: 50%;
   }
 
-  @media (min-width: 34rem) {
-    .label {
-      position: static;
-      width: auto;
-      height: auto;
-      clip-path: none;
-    }
+  .sun::before {
+    inset: 0;
+    background: repeating-conic-gradient(from -6deg, currentColor 0deg 12deg, transparent 12deg 45deg);
+    mask-image: radial-gradient(circle closest-side, transparent 66%, black 68%);
+  }
+
+  .sun::after {
+    inset: 26%;
+    border: 1.5px solid currentColor;
+  }
+
+  :global(html[data-theme='dark']) .moon {
+    display: none;
+  }
+
+  :global(html[data-theme='dark']) .sun {
+    display: block;
   }
 </style>
 
@@ -59,9 +75,8 @@
     if (!button) return;
 
     const sync = () => {
-      const dark = document.documentElement.dataset.theme === 'dark';
-      button.setAttribute('aria-pressed', String(dark));
-      button.querySelector('.label').textContent = dark ? '라이트 모드' : '다크 모드';
+      const next = document.documentElement.dataset.theme === 'dark' ? '라이트' : '다크';
+      button.setAttribute('aria-label', `${next} 모드로 전환`);
     };
 
     button.addEventListener('click', () => {

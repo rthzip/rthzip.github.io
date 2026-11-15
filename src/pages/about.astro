@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../consts';
 ---
 
-<BaseLayout title="소개" description="sejeong park 소개">
+<BaseLayout title="소개" description="sejeong park 소개" showSidebar={false}>
   <article class="prose">
     <h1>소개</h1>
     <p>
@@ -18,7 +18,7 @@ import { SITE } from '../consts';
 
     <h2>연락</h2>
     <p>
-      <a class="seal-link" href={SITE.github}>GitHub</a>에서 찾을 수 있습니다.
+      <a href={SITE.github}>GitHub</a> · <a href={SITE.linkedin}>LinkedIn</a>
     </p>
   </article>
 </BaseLayout>

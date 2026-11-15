@@ -1,6 +1,6 @@
-# sejeong-park.github.io
+# rthzip.github.io
 
-Astro 로 만든 개인 블로그. https://sejeong-park.github.io
+Astro 로 만든 개인 블로그. https://rthzip.github.io
 
 ## 글 쓰기
 
@@ -12,6 +12,7 @@ Astro 로 만든 개인 블로그. https://sejeong-park.github.io
 title: '글 제목'
 description: '목록과 검색, 공유 미리보기에 쓰입니다.'
 pubDate: 2026-09-19
+category: ['일상', '커피']
 tags: ['astro', 'blog']
 draft: false
 ---
@@ -26,9 +27,11 @@ draft: false
 | `pubDate` | 예 | 발행일 |
 | `updatedDate` | 아니오 | 고친 날짜. 넣으면 글머리에 표시됩니다 |
 | `tags` | 아니오 | 문자열 배열. 태그 페이지가 자동으로 생깁니다 |
+| `category` | 아니오 | 폴더 이름 배열. `['일상']` 또는 `['일상', '커피']`처럼 1~2단계로 지정합니다 |
 | `draft` | 아니오 | `true` 면 빌드에서 제외됩니다 |
 
-프런트매터는 `src/content.config.ts` 의 스키마로 검증합니다. 빠뜨리면 빌드가 실패합니다.
+글 폴더는 공개 글의 `category`에서 생성됩니다. 상위 폴더에는 하위 폴더의 글도 표시됩니다.
+프런트매터는 `src/content.config.ts` 의 스키마로 검증합니다.
 
 ## 명령어
 

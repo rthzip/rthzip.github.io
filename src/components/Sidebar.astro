@@ -1,0 +1,139 @@
+---
+import SidebarProfile from './SidebarProfile.astro';
+import { folderHref, getFolders, getPublishedPosts } from '../blog';
+
+interface Props {
+  activeCategory?: string[];
+}
+
+const { activeCategory } = Astro.props;
+const posts = await getPublishedPosts();
+const folders = getFolders(posts);
+const current = decodeURIComponent(Astro.url.pathname).replace(/\/?$/, '/');
+const onPage = (href: string) => current === decodeURIComponent(href);
+const activePath = activeCategory?.join('/');
+const isActiveFolder = (path: string[]) => path.join('/') === activePath;
+---
+
+<aside class="sidebar">
+  <SidebarProfile />
+
+  <nav class="blog-nav" aria-label="블로그 메뉴">
+    <a class="nav-item home" href="/" aria-current={current === '/' ? 'page' : undefined}>
+      <span class="feed-icon" aria-hidden="true"></span>
+      Home
+      <span class="total" aria-label={`글 ${posts.length}개`}>{posts.length}</span>
+    </a>
+    {folders.length > 0 && (
+      <div class="folder-group">
+        <p class="menu-label">글 폴더</p>
+        <ul>
+          {folders.map((folder) => (
+            <li>
+              <a
+                class:list={['nav-item', { 'active-folder': isActiveFolder(folder.path) }]}
+                href={folderHref(folder.path)}
+                aria-current={onPage(folderHref(folder.path)) ? 'page' : undefined}
+              >
+                <span class="folder-icon" aria-hidden="true"></span>
+                {folder.name}
+                <span class="total" aria-label={`글 ${folder.posts.length}개`}>{folder.posts.length}</span>
+              </a>
+              {folder.children.length > 0 && (
+                <ul class="children">
+                  {folder.children.map((child) => (
+                    <li>
+                      <a
+                        class:list={['nav-item', 'child', { 'active-folder': isActiveFolder(child.path) }]}
+                        href={folderHref(child.path)}
+                        aria-current={onPage(folderHref(child.path)) ? 'page' : undefined}
+                      >
+                        {child.name}
+                        <span class="total" aria-label={`글 ${child.posts.length}개`}>{child.posts.length}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+  </nav>
+</aside>
+
+<style>
+  .sidebar {
+    min-width: 0;
+  }
+
+  ul { list-style: none; padding: 0; margin: 0; }
+  .blog-nav { margin-top: 0.85rem; }
+  .folder-group { margin-top: 1.1rem; }
+
+  .menu-label {
+    margin: 0 0 0.35rem;
+    padding-inline: 0.7rem;
+    color: var(--ink-faint);
+    font-size: 0.76rem;
+    font-weight: 600;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.45rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.4rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+  }
+
+  .nav-item:hover { color: var(--ink); }
+  .nav-item.home { font-weight: 600; }
+
+  .nav-item.active-folder,
+  .nav-item[aria-current='page'] {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .total {
+    margin-left: auto;
+    color: var(--ink-faint);
+    font: 0.7rem var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .children {
+    margin-left: 1.08rem;
+    padding-left: 0.5rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .child { min-height: 2.25rem; }
+
+  .feed-icon, .folder-icon {
+    position: relative;
+    flex: 0 0 0.85rem;
+    height: 0.68rem;
+    border: 1px solid currentColor;
+    border-radius: 0.12rem;
+    color: var(--accent-muted);
+  }
+
+  .feed-icon::before, .folder-icon::before {
+    position: absolute;
+    content: '';
+    border-top: 1px solid currentColor;
+  }
+
+  .feed-icon::before { inset: 0.18rem 0.13rem auto; }
+  .folder-icon::before { top: -0.19rem; left: 0; width: 0.39rem; }
+
+  @media (min-width: 52rem) {
+    .sidebar { position: sticky; top: 1.5rem; }
+  }
+</style>

@@ -2,14 +2,17 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Sidebar from '../components/Sidebar.astro';
 
 interface Props {
   title: string;
   description?: string;
   ogType?: 'website' | 'article';
+  activeCategory?: string[];
+  showSidebar?: boolean;
 }
 
-const { title, description, ogType } = Astro.props;
+const { title, description, ogType, activeCategory, showSidebar = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,14 +23,49 @@ const { title, description, ogType } = Astro.props;
   <body>
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <Header />
-    <main id="main" class="shell">
-      <slot />
-    </main>
+    <div class:list={['shell', 'frame', showSidebar ? 'with-sidebar' : 'standalone']}>
+      {showSidebar && <Sidebar {activeCategory} />}
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+    </div>
     <Footer />
-    <style is:global>
-      main {
-        padding-block: clamp(2.5rem, 6vw, 4.5rem) 0;
-      }
-    </style>
   </body>
 </html>
+
+<style>
+  .frame {
+    flex: 1;
+    display: grid;
+    align-items: start;
+    gap: 1.75rem;
+    padding-top: clamp(1.25rem, 4vw, 3.5rem);
+  }
+
+  main {
+    min-width: 0;
+  }
+
+  .standalone main {
+    width: 100%;
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+
+  .with-sidebar main {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.65rem;
+  }
+
+  @media (min-width: 52rem) {
+    .with-sidebar {
+      grid-template-columns: minmax(13.5rem, 15rem) minmax(0, 1fr);
+      gap: clamp(2rem, 5vw, 4.5rem);
+    }
+
+    .with-sidebar main {
+      border-top: 0;
+      padding-top: 0;
+    }
+  }
+</style>

@@ -15,7 +15,7 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 const largest = tags.length > 0 ? tags[0][1] : 1;
 ---
 
-<BaseLayout title="태그" description="주제별로 모아 둔 글 목록">
+<BaseLayout title="태그" description="주제별로 모아 둔 글 목록" showSidebar={false}>
   <h1 class="page-title">태그</h1>
   {
     tags.length === 0 ? (
@@ -78,7 +78,7 @@ const largest = tags.length > 0 ? tags[0][1] : 1;
     display: block;
     height: 100%;
     width: var(--fill);
-    background: var(--celadon);
+    background: var(--accent-muted);
   }
 
   .count {
@@ -88,11 +88,11 @@ const largest = tags.length > 0 ? tags[0][1] : 1;
   }
 
   .tags a:hover .name {
-    color: var(--seal);
+    color: var(--accent);
   }
 
   .tags a:hover .bar::before {
-    background: var(--seal);
+    background: var(--accent);
   }
 
   .void {

@@ -1,20 +1,18 @@
-/* ── 청자 & 인장 ─────────────────────────────────────────────
-   미색 청자 종이 위의 청록 먹, 그리고 낙관 하나.
-   강조색은 세 군데에만 쓴다: 포커스, 현재 위치, 본문 링크 밑줄.
-   ──────────────────────────────────────────────────────────── */
-
 :root {
-  --paper: #f2f4f0;
-  --paper-sunk: #e9ece4;
-  --ink: #15211f;
-  --ink-soft: #45524f;
-  --ink-faint: #5f6f6a;
-  --rule: #d3dace;
-  --celadon: #3f6b5e;
-  --seal: #b8402b;
+  color-scheme: light;
+  --paper: #ffffff;
+  --surface: #f7f7f7;
+  --paper-sunk: #f0f0f0;
+  --ink: #1c1c1c;
+  --ink-soft: #4b4b4b;
+  --ink-faint: #686868;
+  --rule: #e2e2e2;
+  --accent-muted: #575757;
+  --accent: #8a3c78;
+  --highlight: #f0d889;
 
-  --font-sans: 'IBM Plex Sans KR', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* 17px 기준, 1.25 모듈러 스케일 */
   --step--1: 0.882rem;
@@ -22,23 +20,24 @@
   --step-1: 1.33rem;
   --step-2: 1.66rem;
   --step-3: clamp(1.9rem, 1.55rem + 1.5vw, 2.5rem);
-  --step-4: clamp(2.2rem, 1.6rem + 2.6vw, 3.4rem);
 
   --measure: 66ch;
   --gutter: clamp(1.25rem, 5vw, 3rem);
-  --shell: 46rem;
-  --date-col: 7rem;
+  --shell: 74rem;
 }
 
 :root[data-theme='dark'] {
-  --paper: #101917;
-  --paper-sunk: #18211f;
-  --ink: #e4e9e3;
-  --ink-soft: #b1beb8;
-  --ink-faint: #8c9a94;
-  --rule: #29352f;
-  --celadon: #8fb8a9;
-  --seal: #e97a63;
+  color-scheme: dark;
+  --paper: #222222;
+  --surface: #2b2b2b;
+  --paper-sunk: #333333;
+  --ink: #ededed;
+  --ink-soft: #c7c7c7;
+  --ink-faint: #a2a2a2;
+  --rule: #414141;
+  --accent-muted: #b6b6b6;
+  --accent: #ddaad4;
+  --highlight: #685323;
 }
 
 *,
@@ -53,6 +52,9 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -80,20 +82,20 @@ a {
 }
 
 .prose a,
-a.seal-link {
+a.text-link {
   text-decoration: underline;
-  text-decoration-color: var(--seal);
+  text-decoration-color: var(--accent);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.22em;
 }
 
 .prose a:hover,
-a.seal-link:hover {
-  color: var(--seal);
+a.text-link:hover {
+  color: var(--accent);
 }
 
 :focus-visible {
-  outline: 2px solid var(--seal);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -123,6 +125,12 @@ h4 {
   letter-spacing: -0.015em;
   margin: 0;
   text-wrap: balance;
+}
+
+.feed-title {
+  margin-bottom: 1.15rem;
+  font-size: 1.125rem;
+  font-weight: 700;
 }
 
 /* ── 본문 ─────────────────────────────────────────────── */
@@ -164,7 +172,7 @@ h4 {
 .prose blockquote {
   margin-inline: 0;
   padding-left: 1.1rem;
-  border-left: 2px solid var(--celadon);
+  border-left: 2px solid var(--accent-muted);
   color: var(--ink-soft);
 }
 
@@ -244,11 +252,11 @@ samp {
   flex-wrap: wrap;
   gap: 0.2rem 0.9rem;
   font-size: var(--step--1);
-  color: var(--celadon);
+  color: var(--accent-muted);
 }
 
 .tag-row a:hover {
-  color: var(--seal);
+  color: var(--accent);
 }
 
 /* ── 모션 ─────────────────────────────────────────────── */
