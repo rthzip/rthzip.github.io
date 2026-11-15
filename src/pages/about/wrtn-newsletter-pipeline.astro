@@ -1,0 +1,144 @@
+---
+import PostToc from '../../components/PostToc.astro';
+import { Content, getHeadings } from '../../content/projects/wrtn-newsletter-pipeline.md';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/post-content.css';
+
+const title = '나만을 위한 맞춤형 뉴스레터 파이프라인(뤼튼 3.0)';
+const sections = (await getHeadings()).filter(({ depth }) => depth === 2);
+---
+
+<BaseLayout title={title} description="뤼튼 3.0 리뉴얼의 개인 맞춤형 뉴스레터 데이터 파이프라인 프로젝트" ogType="article" showSidebar={false}>
+  <article class="newsletter-project">
+    <header class="project-header">
+      <h1 class="section-title">{title}</h1>
+      <p class="project-role">Wrtn Technologies · AI팀 · Data Engineer Intern</p>
+      <dl class="project-meta">
+        <div>
+          <dt>기간</dt>
+          <dd><time datetime="2025-02-25">2025.02.25</time> – <time datetime="2025-04-26">2025.04.26</time></dd>
+        </div>
+        <div>
+          <dt>담당 역할</dt>
+          <dd>LLM 기반 데이터 파이프라인 개발</dd>
+        </div>
+        <div>
+          <dt>참여 인원</dt>
+          <dd>2명 (데이터 엔지니어 1명, 기획·AI 1명)</dd>
+        </div>
+      </dl>
+    </header>
+
+    <div class="project-detail">
+      <details class="project-toc-mobile">
+        <summary>목차</summary>
+        <PostToc {sections} />
+      </details>
+      <div class="prose post-content project-body"><Content /></div>
+      <aside class="project-toc">
+        <p>목차</p>
+        <PostToc {sections} />
+      </aside>
+    </div>
+
+    <a class="text-link project-back" href="/about/#about-experience">← About 경력으로 돌아가기</a>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-header { margin-bottom: 2rem; }
+
+  .project-role {
+    margin: 0.5rem 0 1.25rem;
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+
+  .project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem;
+    margin: 0;
+    padding-block: 0.85rem;
+    border-block: 1px solid var(--rule);
+    font-size: var(--step--1);
+  }
+
+  .project-meta dt { color: var(--ink-faint); }
+  .project-meta dd { margin: 0; }
+
+  .project-body { max-width: none; }
+
+  .project-body :global(figure) { margin-inline: 0; }
+
+  .project-body :global(figure img) {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+
+  .project-body :global(figcaption) {
+    margin-top: 0.45rem;
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+  }
+
+  .project-toc { display: none; }
+
+  .project-toc-mobile {
+    margin-bottom: 1.5rem;
+    font-size: var(--step--1);
+  }
+
+  .project-toc-mobile summary { cursor: pointer; }
+  .project-toc-mobile[open] summary { margin-bottom: 0.55rem; }
+
+  .project-back {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: var(--step--1);
+  }
+
+  @media (min-width: 58rem) {
+    :global(.layout-frame.standalone > main:has(> .newsletter-project)) { max-width: 56rem; }
+
+    .project-detail {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 9.5rem;
+      align-items: start;
+      gap: 2rem;
+    }
+
+    .project-toc {
+      display: block;
+      position: sticky;
+      top: 1.5rem;
+      padding-inline-start: 1rem;
+      border-inline-start: 1px solid var(--rule);
+    }
+
+    .project-toc p {
+      margin: 0 0 0.55rem;
+      color: var(--ink-faint);
+      font-size: var(--step--1);
+      font-weight: 600;
+    }
+
+    .project-toc-mobile { display: none; }
+  }
+</style>
+
+<style is:inline>
+  .newsletter-project .project-body > h2 { font-size: 1.3125rem; }
+
+  .newsletter-project .project-body > h3 { font-size: 1.125rem; }
+
+  .newsletter-project .project-body > h2:not(:first-child) {
+    padding-top: calc(0.7rem + 1px);
+    border-top: 0.5px solid color-mix(in srgb, var(--rule) 70%, transparent);
+  }
+
+  .newsletter-project .project-body > h2:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+</style>
