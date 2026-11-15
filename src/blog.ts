@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { BLOG_ROOT_FOLDERS } from './consts';
 
 type Post = CollectionEntry<'blog'>;
 
@@ -26,7 +27,12 @@ export function folderHref(path: readonly string[]) {
 }
 
 export function getFolders(posts: Post[]) {
-  const roots: Folder[] = [];
+  const roots: Folder[] = BLOG_ROOT_FOLDERS.map((name) => ({
+    name,
+    path: [name],
+    posts: [],
+    children: [],
+  }));
 
   for (const post of posts) {
     let siblings = roots;
@@ -45,7 +51,12 @@ export function getFolders(posts: Post[]) {
     }
   }
 
-  const byName = (a: Folder, b: Folder) => a.name.localeCompare(b.name, 'ko');
+  const startsWithLatin = /^\p{Script=Latin}/u;
+  const byName = (a: Folder, b: Folder) => {
+    const aGroup = startsWithLatin.test(a.name) ? 0 : 1;
+    const bGroup = startsWithLatin.test(b.name) ? 0 : 1;
+    return aGroup - bGroup || a.name.localeCompare(b.name, 'ko');
+  };
   for (const folder of flattenFolders(roots)) {
     folder.children.sort(byName);
   }
