@@ -1,0 +1,17 @@
+---
+import { Content, getHeadings } from '../../content/projects/llm-batch-queue.md';
+import ProjectLayout from '../../layouts/ProjectLayout.astro';
+---
+
+<ProjectLayout
+  title="LLM Batch Queue 서비스 개발"
+  description="Azure OpenAI PTU 유휴 용량으로 사내 LLM 배치 요청을 처리하는 큐잉 시스템"
+  role="Wrtn Technologies · AI팀 · Data Engineer Intern"
+  start="2024-12-03"
+  end="2024-12-31"
+  responsibility="백엔드 개발"
+  team="개인 프로젝트"
+  headings={await getHeadings()}
+>
+  <Content />
+</ProjectLayout>

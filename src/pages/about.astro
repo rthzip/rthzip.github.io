@@ -32,8 +32,8 @@ const experience: Experience[] = [
         title: '나만을 위한 맞춤형 뉴스레터 파이프라인(뤼튼 3.0)',
         href: '/about/wrtn-newsletter-pipeline/',
       },
-      { title: 'AI 통합 검색 시스템 고도화' },
-      { title: 'LLM Batch Queue 서비스 개발' },
+      { title: 'AI 통합 검색 시스템 고도화', href: '/about/ai-search-system/' },
+      { title: 'LLM Batch Queue 서비스 개발', href: '/about/llm-batch-queue/' },
     ],
   },
   {
@@ -109,13 +109,16 @@ const experience: Experience[] = [
                   {projects.map(({ title, href }) => (
                     <li>
                       {href ? (
-                        <a class="about-project-link" href={href}>
-                          <span>{title}</span>
-                          <svg class="about-project-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                            <circle cx="10" cy="10" r="9" />
-                            <path d="m7 13 6-6m-4.75 0H13v4.75" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" />
-                          </svg>
-                        </a>
+                        <>
+                          <a class="about-project-link" href={href}>
+                            <span>{title}</span>
+                            <svg class="about-project-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                              <circle cx="10" cy="10" r="9" />
+                              <path d="m7 13 6-6m-4.75 0H13v4.75" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                          </a>
+                          <a class="about-project-print-link" href={new URL(href, Astro.site)}>{title}</a>
+                        </>
                       ) : title}
                     </li>
                   ))}
@@ -306,6 +309,8 @@ const experience: Experience[] = [
     gap: 0.4rem;
   }
 
+  .about-project-print-link { display: none; }
+
   .about-company-link:is(:hover, :focus-visible),
   .about-project-link:is(:hover, :focus-visible) {
     color: var(--accent);
@@ -357,6 +362,7 @@ const experience: Experience[] = [
     body > .foot,
     .skip-link,
     .about-print,
+    .about-project-link,
     astro-dev-toolbar {
       display: none;
     }
@@ -373,6 +379,10 @@ const experience: Experience[] = [
       --about-body-size: 10.5pt;
       line-height: 1.55;
     }
+
+    .about-project-print-link { display: inline; }
+
+    .about-profile a { text-decoration: underline; }
 
     .about-intro h1 { font-size: 22pt; }
     .about-intro p { max-width: none; }
