@@ -47,7 +47,7 @@ const haystack = (post: CollectionEntry<'blog'>) =>
               <a class="title" href={`/posts/${post.id}/`}>
                 {post.data.title}
               </a>
-              <p class="desc">{post.data.description}</p>
+              {post.data.description && <p class="desc">{post.data.description}</p>}
               {post.data.tags.length > 0 && (
                 <ul class="tag-row">
                   {post.data.tags.map((tag) => (

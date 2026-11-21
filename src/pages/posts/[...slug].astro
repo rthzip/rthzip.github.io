@@ -30,12 +30,12 @@ const { Content, headings } = await render(post);
 const sections = headings.filter((heading) => heading.depth === 2);
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description} ogType="article" activeCategory={post.data.category}>
+<BaseLayout title={post.data.title} description={post.data.description ?? undefined} ogType="article" activeCategory={post.data.category}>
   <div class="post-frame">
     <article class:list={['post', { 'has-toc': sections.length > 0 }]}>
       <header class="head">
         <h1>{post.data.title}</h1>
-        <p class="desc">{post.data.description}</p>
+        {post.data.description && <p class="desc">{post.data.description}</p>}
         <p class="when">
           <FormattedDate date={post.data.pubDate} />
           {post.data.updatedDate && <span class="revised">{' '}고침 <FormattedDate date={post.data.updatedDate} /></span>}
