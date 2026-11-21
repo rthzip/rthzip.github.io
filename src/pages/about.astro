@@ -6,242 +6,276 @@ import { SITE } from '../consts';
 type Experience = {
   company: string;
   website: { href: string; icon?: string };
-  role: string;
+  employment: string;
+  positions: { title: string; summary?: string; projects?: { title: string; href?: string }[] }[];
   start: string;
   end?: string;
-  summary?: string;
-  projects?: { title: string; href?: string }[];
 };
 
 const experience: Experience[] = [
   {
     company: '다음(Daum)',
     website: { href: 'https://m.daum.net/', icon: '/company-icons/daum.ico' },
-    role: '추천개발팀 · Backend/ML Engineer',
+    employment: '정규직',
     start: '2025-09',
+    positions: [{ title: '추천개발팀 · Backend / ML Engineer' }],
   },
   {
     company: 'Wrtn Technologies',
     website: { href: 'https://wrtn.ai/', icon: '/company-icons/wrtn.png' },
-    role: 'AI팀 · Data Engineer Intern',
+    employment: '인턴',
     start: '2024-11',
     end: '2025-05',
-    summary: 'AI 서비스 백엔드와 RAG에 필요한 데이터 파이프라인을 개발했습니다.',
-    projects: [
-      {
-        title: '나만을 위한 맞춤형 뉴스레터 파이프라인(뤼튼 3.0)',
-        href: '/about/wrtn-newsletter-pipeline/',
-      },
-      { title: 'AI 통합 검색 시스템 고도화', href: '/about/ai-search-system/' },
-      { title: 'LLM Batch Queue 서비스 개발', href: '/about/llm-batch-queue/' },
-    ],
+    positions: [{
+      title: 'AI팀 · Data Engineer',
+      summary: 'AI 서비스 백엔드와 RAG에 필요한 데이터 파이프라인을 개발했습니다.',
+      projects: [
+        {
+          title: '나만을 위한 맞춤형 뉴스레터 파이프라인(뤼튼 3.0)',
+          href: '/about/wrtn-newsletter-pipeline/',
+        },
+        { title: 'AI 통합 검색 시스템 고도화', href: '/about/ai-search-system/' },
+        { title: 'LLM Batch Queue 서비스 개발', href: '/about/llm-batch-queue/' },
+      ],
+    }],
   },
   {
     company: '크라우드웍스',
     website: { href: 'https://www.crowdworks.ai/', icon: '/company-icons/crowdworks.png' },
-    role: '데이터 엔지니어링팀 · Data Engineer Assistant',
+    employment: '계약직',
     start: '2021-10',
     end: '2022-12',
-    summary: 'GCP에서 Python 기반 데이터 처리와 운영 자동화 도구를 개발했습니다.',
-    projects: [
-      { title: '데이터 기반 프로젝트 개발 및 운영' },
-      { title: 'TTA 프로젝트 - AI 학습용 데이터 의미적 정확성 검사 프로젝트 매니징' },
+    positions: [
+      {
+        title: 'Data Engineering 팀',
+        summary: 'GCP에서 Python 기반 데이터 처리와 운영 자동화 도구를 개발했습니다.',
+        projects: [{ title: '데이터 기반 프로젝트 개발 및 운영' }],
+      },
+      {
+        title: 'Enterprise 팀',
+        projects: [{ title: 'TTA 프로젝트 - AI 학습용 데이터 의미적 정확성 검사 프로젝트 매니징' }],
+      },
     ],
   },
   {
     company: '한국전자통신연구원 (ETRI)',
     website: { href: 'https://www.etri.re.kr/kor/main/main.etri' },
-    role: '환경 ICT 연구실 · AI Research Intern',
+    employment: '인턴',
     start: '2021-01',
     end: '2021-02',
-    summary: '에너지 계량 데이터를 이용한 시계열 예측 모델의 성능을 평가했습니다.',
+    positions: [{
+      title: '환경 ICT 연구실 · AI Research',
+      summary: '에너지 계량 데이터를 이용한 시계열 예측 모델의 성능을 평가했습니다.',
+    }],
   },
 ];
 ---
 
 <BaseLayout title="About" description="박세정의 백엔드·ML 엔지니어링 경력, 학력, 활동" showSidebar={false}>
   <article class="about-profile">
-    <header class="about-intro">
-      <div class="about-heading">
-        <div class="about-identity">
-          <img class="about-avatar" src={profilePhoto.src} alt="" width="84" height="84" />
-          <div>
-            <h1>박세정</h1>
-            <p class="about-role">Backend / ML Engineer</p>
-          </div>
-        </div>
-        <button id="about-print" class="about-print" type="button" hidden>PDF로 저장</button>
-      </div>
-      <p><strong>AI, 백엔드, 데이터 엔지니어링이 교차하는 지점에서 데이터 기반 문제 해결에 매력을 느끼는 주니어 개발자 입니다.</strong></p>
-      <p>AI 검색 시스템과 LLM 기반 데이터 파이프라인을 구축하며 검색 품질 개선을 중심으로 문제를 해결해왔습니다. 데이터의 진정한 가치는 사용자의 문제를 깊이 이해하고 이를 기술로 해결할 때 비로소 발현된다고 믿습니다. 이를 바탕으로 조직의 실질적인 가치를 창출하는 데 기여하고자 합니다.</p>
-      <p>향상심과 항상심을 바탕으로 끊임없이 배우고 성장하며, 다양한 관점과 동료들의 강점에서 배움을 얻어 저만의 방식으로 체화 해나가고 있습니다.</p>
+    <aside class="about-sidebar" aria-label="박세정 프로필">
+      <img class="about-avatar" src={profilePhoto.src} alt="박세정 프로필 사진" width="128" height="128" />
+      <h1>박세정</h1>
+      <p class="about-role">Backend / ML Engineer</p>
       <ul class="about-links" aria-label="프로필 링크">
         <li><a class="text-link" href={SITE.github}>GitHub</a></li>
         <li><a class="text-link" href={SITE.linkedin}>LinkedIn</a></li>
-        <li><a class="text-link" href="mailto:mblaqsj1015@naver.com">Mail</a></li>
       </ul>
-    </header>
+      <p class="about-email">mblaqsj1015@naver.com</p>
+    </aside>
 
-    <section class="about-section" aria-labelledby="about-experience">
-      <h2 id="about-experience">Work Experience</h2>
-      <ol class="about-experience">
-        {experience.map(({ company, website, role, start, end, summary, projects }) => (
-          <li class="about-timeline-entry">
-            <p class="about-period">
-              <time datetime={start}>{start.replace('-', '.')}</time>{' – '}
-              {end ? <time datetime={end}>{end.replace('-', '.')}</time> : '현재'}
-            </p>
-            <div>
-              <h3>
-                <a class="about-company-link" href={website.href}>
-                  <span>{company}</span>
-                  {website.icon && (
-                    <span class="about-company-icon">
-                      <img src={website.icon} alt="" width="16" height="16" />
-                    </span>
-                  )}
-                </a>
-              </h3>
-              <p class="about-entry-meta">{role}</p>
-              {summary && <p class="about-job-summary">{summary}</p>}
-              {projects && (
-                <ul class="about-entry-list">
-                  {projects.map(({ title, href }) => (
-                    <li>
-                      {href ? (
-                        <>
-                          <a class="about-project-link" href={href}>
-                            <span>{title}</span>
-                            <svg class="about-project-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                              <circle cx="10" cy="10" r="9" />
-                              <path d="m7 13 6-6m-4.75 0H13v4.75" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                          </a>
-                          <a class="about-project-print-link" href={new URL(href, Astro.site)}>{title}</a>
-                        </>
-                      ) : title}
-                    </li>
+    <div class="about-content">
+      <header class="about-intro">
+        <div class="about-heading">
+          <button id="about-print" class="about-print" type="button" hidden>PDF로 저장</button>
+        </div>
+        <p><strong>AI, 백엔드, 데이터 엔지니어링이 교차하는 지점에서 데이터 기반 문제 해결에 매력을 느끼는 주니어 개발자 입니다.</strong></p>
+        <p>AI 검색 시스템과 LLM 기반 데이터 파이프라인을 구축하며 검색 품질 개선을 중심으로 문제를 해결해왔습니다. 데이터의 진정한 가치는 사용자의 문제를 깊이 이해하고 이를 기술로 해결할 때 비로소 발현된다고 믿습니다. 이를 바탕으로 조직의 실질적인 가치를 창출하는 데 기여하고자 합니다.</p>
+        <p>향상심과 항상심을 바탕으로 끊임없이 배우고 성장하며, 다양한 관점과 동료들의 강점에서 배움을 얻어 저만의 방식으로 체화 해나가고 있습니다.</p>
+      </header>
+
+      <section class="about-section" aria-labelledby="about-experience">
+        <h2 id="about-experience">Work Experience</h2>
+        <ol class="about-experience">
+          {experience.map(({ company, website, employment, start, end, positions }) => (
+            <li class="about-timeline-entry about-work-entry">
+              <p class="about-period">
+                <time datetime={start}>{start.replace('-', '.')}</time>{' – '}
+                {end ? <time datetime={end}>{end.replace('-', '.')}</time> : '현재'}
+              </p>
+              <div>
+                <h3>
+                  <a class="about-company-link" href={website.href}>
+                    <span>{company}</span>
+                    {website.icon && (
+                      <span class="about-company-icon">
+                        <img src={website.icon} alt="" width="16" height="16" />
+                      </span>
+                    )}
+                  </a>
+                </h3>
+                <div class="about-positions">
+                  {positions.map(({ title, summary, projects }) => (
+                    <div class="about-position">
+                      <h4>{title}<span class="about-employment"> · {employment}</span></h4>
+                      {summary && <p class="about-job-summary">{summary}</p>}
+                      {projects && (
+                        <ul class="about-entry-list">
+                          {projects.map(({ title, href }) => (
+                            <li>
+                              {href ? (
+                                <>
+                                  <a class="about-project-link" href={href}>
+                                    <span>{title}</span>
+                                    <svg class="about-project-arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                                      <circle cx="10" cy="10" r="9" />
+                                      <path d="m7 13 6-6m-4.75 0H13v4.75" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                  </a>
+                                  <a class="about-project-print-link" href={new URL(href, Astro.site)}>{title}</a>
+                                </>
+                              ) : title}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   ))}
-                </ul>
-              )}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-    <section class="about-section" aria-labelledby="about-education">
-      <h2 id="about-education">Education</h2>
-      <div class="about-timeline-entry">
-        <p class="about-period"><time datetime="2017-03">2017.03</time>{' – '}<time datetime="2023-02">2023.02</time></p>
-        <div>
-          <h3>세종대학교</h3>
-          <p class="about-entry-meta">지능기전공학부 무인이동체공학 전공 · 학사</p>
+      <section class="about-section" aria-labelledby="about-education">
+        <h2 id="about-education">Education</h2>
+        <div class="about-timeline-entry">
+          <p class="about-period"><time datetime="2017-03">2017.03</time>{' – '}<time datetime="2023-02">2023.02</time></p>
+          <div>
+            <h3>세종대학교</h3>
+            <p class="about-entry-meta">지능기전공학부 무인이동체공학 전공 · 학사</p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="about-section" aria-labelledby="about-activity">
-      <h2 id="about-activity">Activity</h2>
-      <div class="about-timeline-entry">
-        <p class="about-period"><time datetime="2023-07">2023.07</time>{' – '}<time datetime="2024-06">2024.06</time></p>
-        <div>
-          <h3>삼성 청년 SW 아카데미 10기</h3>
-          <ul class="about-entry-list">
-            <li>알고리즘, 소프트웨어 이론, 백엔드/프론트엔드 개발 전반에 걸친 학습</li>
-            <li>3회의 팀 프로젝트에서 백엔드 개발자로 참여하여 요구사항 분석, 설계, 개발, 배포까지 전 과정 경험 (w/Spring boot)</li>
-          </ul>
+      <section class="about-section" aria-labelledby="about-activity">
+        <h2 id="about-activity">Activity</h2>
+        <div class="about-timeline-entry">
+          <p class="about-period"><time datetime="2023-07">2023.07</time>{' – '}<time datetime="2024-06">2024.06</time></p>
+          <div>
+            <h3>삼성 청년 SW 아카데미 10기</h3>
+          </div>
         </div>
-      </div>
-    </section>
+        <div class="about-timeline-entry">
+          <p class="about-period"><time datetime="2021-07">2021.07</time>{' – '}<time datetime="2021-09">2021.09</time></p>
+          <div>
+            <h3>MINES LAB 학부연구생</h3>
+          </div>
+        </div>
+        <div class="about-timeline-entry">
+          <p class="about-period"><time datetime="2021-03">2021.03</time>{' – '}<time datetime="2021-09">2021.09</time></p>
+          <div>
+            <h3>SAI (세종대학교 인공지능 동아리)</h3>
+          </div>
+        </div>
+      </section>
+    </div>
   </article>
 </BaseLayout>
 
 <style is:inline>
+  .layout-frame.standalone > main:has(> .about-profile) { max-width: 62rem; }
+
   .about-profile {
     --about-body-size: 0.9375rem;
+    display: grid;
+    gap: 2rem;
   }
 
-  .about-heading {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem 1rem;
-    margin-bottom: 1.15rem;
-  }
-
-  .about-identity {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
+  .about-sidebar { min-width: 0; }
 
   .about-avatar {
     display: block;
-    flex: none;
-    border-radius: 4px;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    object-fit: cover;
   }
 
-  .about-print {
-    flex: none;
-    min-height: 2.25rem;
-    padding: 0.35rem 0.7rem;
-    border: 1px solid var(--rule);
-    border-radius: 0.25rem;
-    background: var(--surface);
-    color: var(--ink);
-    font: inherit;
-    font-size: var(--step--1);
-    cursor: pointer;
-  }
-
-  .about-print:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .about-intro h1 {
-    font-size: clamp(1.75rem, 1.5rem + 1vw, 2.125rem);
+  .about-sidebar h1 {
+    margin-top: 1rem;
+    font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.03em;
   }
 
-  .about-intro p {
-    max-width: 62ch;
-    margin: 0.6rem 0 0;
+  .about-role {
+    margin: 0.4rem 0 0;
     color: var(--ink-soft);
-    font-size: var(--about-body-size);
-  }
-
-  .about-intro .about-role {
-    margin: 0.2rem 0 0;
-    color: var(--accent);
-    font-weight: 600;
-    line-height: 1.4;
+    font-size: 0.8125rem;
   }
 
   .about-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.45rem 1rem;
-    margin: 1rem 0 0;
+    gap: 0.75rem;
+    margin: 1.1rem 0 0;
     padding: 0;
     list-style: none;
-    font-size: var(--step--1);
+    font-size: 0.875rem;
   }
 
-  .about-section {
-    margin-top: 1.85rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
+  .about-email {
+    margin: 0.75rem 0 0;
+    color: var(--ink-faint);
+    font-size: 0.8125rem;
+    overflow-wrap: anywhere;
+  }
+
+  .about-content { min-width: 0; }
+
+  .about-heading {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
 
   .about-section h2 {
-    margin-bottom: 1rem;
-    font-size: 1.1875rem;
+    font-size: 1.125rem;
     font-weight: 700;
   }
+
+  .about-print {
+    flex: none;
+    min-height: 2rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    background: var(--paper);
+    color: var(--ink-soft);
+    font: inherit;
+    font-size: 0.8125rem;
+    cursor: pointer;
+  }
+
+  .about-print:hover { color: var(--accent); border-color: var(--accent); }
+
+  .about-intro p {
+    margin: 0.75rem 0 0;
+    color: var(--ink-soft);
+    font-size: var(--about-body-size);
+  }
+
+  .about-section {
+    margin-top: 2.25rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .about-section h2 { margin-bottom: 1.5rem; }
 
   .about-section h3 {
     font-size: 1rem;
@@ -251,38 +285,53 @@ const experience: Experience[] = [
   .about-company-link {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.35rem;
+    vertical-align: middle;
   }
 
-  .about-company-icon {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-  }
+  .about-company-icon { display: inline-flex; flex: none; }
+  .about-company-icon img { object-fit: contain; }
 
-  .about-company-icon:hover {
-    background: var(--surface);
-  }
-
-  .about-company-icon img {
-    object-fit: contain;
+  .about-employment {
+    display: inline-block;
+    margin-left: 0.25rem;
+    color: var(--ink-faint);
+    font-size: 0.75rem;
+    font-weight: 400;
   }
 
   .about-experience {
-    display: grid;
-    gap: 1rem;
-    margin: 0;
+    margin: 0 0 0 4px;
     padding: 0;
     list-style: none;
   }
 
-  .about-timeline-entry {
-    display: grid;
-    gap: 0.2rem;
+  .about-timeline-entry { display: grid; gap: 0.4rem; }
+
+  [aria-labelledby='about-activity'] > .about-timeline-entry + .about-timeline-entry {
+    margin-top: 1.1rem;
   }
+
+  .about-work-entry {
+    position: relative;
+    padding: 0 0 2rem 1.5rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .about-work-entry::before {
+    content: '';
+    position: absolute;
+    top: 0.4rem;
+    left: -4px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ink-faint);
+    box-shadow: 0 0 0 4px var(--paper);
+  }
+
+  .about-work-entry:first-child::before { background: var(--accent); }
+  .about-work-entry:last-child { padding-bottom: 0; }
 
   .about-period {
     margin: 0;
@@ -291,17 +340,25 @@ const experience: Experience[] = [
     font-variant-numeric: tabular-nums;
   }
 
+  .about-positions { margin-top: 0.65rem; }
+  .about-position + .about-position { margin-top: 1.25rem; }
+
+  .about-position h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
   .about-entry-meta,
   .about-job-summary,
   .about-entry-list {
-    margin: 0.25rem 0 0;
+    margin: 0.35rem 0 0;
     color: var(--ink-soft);
     font-size: var(--about-body-size);
   }
 
-  .about-entry-meta { color: var(--ink-faint); }
-
   .about-entry-list { padding-inline-start: 1.2em; }
+  .about-entry-list li + li { margin-top: 0.2rem; }
 
   .about-project-link {
     display: inline-flex;
@@ -317,33 +374,26 @@ const experience: Experience[] = [
     font-weight: 700;
   }
 
-  .about-project-arrow {
-    display: block;
-    flex: none;
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .about-project-arrow circle {
-    stroke: var(--rule);
-  }
-
-  .about-project-link:is(:hover, :focus-visible) .about-project-arrow circle {
-    stroke: currentColor;
-  }
+  .about-project-arrow { display: block; flex: none; width: 1.25rem; height: 1.25rem; }
+  .about-project-arrow circle { stroke: var(--rule); }
+  .about-project-link:is(:hover, :focus-visible) .about-project-arrow circle { stroke: currentColor; }
 
   @media (min-width: 35rem) {
-    .about-timeline-entry {
-      grid-template-columns: 9rem minmax(0, 1fr);
-      column-gap: 1rem;
+    .about-timeline-entry { grid-template-columns: 8rem minmax(0, 1fr); gap: 1rem; }
+  }
+
+  @media (min-width: 52rem) {
+    .about-profile { grid-template-columns: 13rem minmax(0, 1fr); gap: 2.5rem; }
+    .about-sidebar {
+      position: sticky;
+      top: 2rem;
+      align-self: start;
+      padding-right: 1.5rem;
     }
   }
 
   @media print {
-    @page {
-      size: A4;
-      margin: 14mm 17mm;
-    }
+    @page { size: A4; margin: 14mm 17mm; }
 
     :root,
     :root[data-theme='dark'] {
@@ -363,50 +413,32 @@ const experience: Experience[] = [
     .skip-link,
     .about-print,
     .about-project-link,
-    astro-dev-toolbar {
-      display: none;
-    }
+    astro-dev-toolbar { display: none; }
 
     body > .layout-frame,
-    .layout-frame.standalone > main {
+    .layout-frame.standalone > main:has(> .about-profile) {
       display: block;
       max-width: none;
       margin: 0;
       padding: 0;
     }
 
-    .about-profile {
-      --about-body-size: 10.5pt;
-      line-height: 1.55;
-    }
-
+    .about-profile { display: block; --about-body-size: 10.5pt; line-height: 1.55; }
+    .about-sidebar { position: static; margin-bottom: 1.5rem; padding: 0; border: 0; }
+    .about-avatar { float: left; width: 80px; height: 80px; margin: 0 1rem 0.5rem 0; }
+    .about-sidebar h1 { margin-top: 0; font-size: 22pt; }
+    .about-links { margin-top: 0.5rem; }
+    .about-email { margin-top: 0.4rem; }
+    .about-content { clear: both; }
     .about-project-print-link { display: inline; }
-
     .about-profile a { text-decoration: underline; }
-
-    .about-intro h1 { font-size: 22pt; }
-    .about-intro p { max-width: none; }
     .about-heading { margin-bottom: 0.75rem; }
-
-    .about-section {
-      margin-top: 1.1rem;
-      padding-top: 0.8rem;
-    }
-
-    .about-section h2 {
-      margin-bottom: 0.65rem;
-      font-size: 12.5pt;
-      break-after: avoid;
-    }
-
+    .about-section { margin-top: 1.1rem; padding-top: 0.8rem; }
+    .about-section h2 { margin-bottom: 0.8rem; font-size: 12.5pt; break-after: avoid; }
     .about-section h3 { font-size: 11pt; }
-    .about-experience { gap: 0.7rem; }
-
-    .about-timeline-entry {
-      grid-template-columns: 33mm minmax(0, 1fr);
-      column-gap: 5mm;
-      break-inside: avoid;
-    }
+    .about-position h4 { font-size: 10.5pt; }
+    .about-work-entry { padding-bottom: 1.25rem; }
+    .about-timeline-entry { grid-template-columns: 29mm minmax(0, 1fr); column-gap: 4mm; break-inside: avoid; }
   }
 </style>
 
