@@ -3,8 +3,7 @@ import { SITE } from '../consts';
 ---
 
 <section class="profile" aria-label="프로필">
-  <p class="name">{SITE.author}</p>
-  <p class="handle">@{SITE.handle}</p>
+  <p class="name">@{SITE.handle}</p>
   <p class="bio">{SITE.description}</p>
   <ul class="socials">
     <li><a href={SITE.github}>GitHub <span aria-hidden="true">↗</span></a></li>
@@ -18,8 +17,7 @@ import { SITE } from '../consts';
     border-bottom: 1px solid var(--rule);
   }
 
-  .profile .name { margin: 0; font-weight: 700; line-height: 1.35; text-transform: capitalize; }
-  .profile .handle { margin: 0.15rem 0 0; color: var(--ink-faint); font-size: 0.78rem; }
+  .profile .name { margin: 0; font-weight: 700; line-height: 1.35; }
   .profile .bio { margin: 0.65rem 0 0.5rem; font-size: var(--step--1); color: var(--ink-soft); }
 
   .profile .socials {

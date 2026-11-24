@@ -153,7 +153,6 @@ h4 {
   font-size: var(--step-2);
   margin-top: 2.6em;
   padding-top: 0.9rem;
-  border-top: 1px solid var(--rule);
 }
 
 .prose h3 {
