@@ -42,7 +42,13 @@ tags: ["일년회고"]
 
 결국 3개월 연장은 거절하고, 지금까지의 업무와 역량을 바탕으로 평가받겠다고 말씀드렸다. 그동안 후회 없이 몰입했지만, 같은 형태로 시간을 더 보내는 것이 당시의 나에게 맞는지는 고민이 됐다. 평가 결과와 별개로, 앞으로 어떤 환경에서 오래 성장할 수 있을지 돌아보고 싶었다. 전환으로 이어지지는 않았지만, 맡았던 뉴스레터는 배포와 안정화, 성과 확인까지 함께한 뒤 마무리했다.
 
+<figure style="max-width: 150px; margin-inline: auto;">
+  <a href="/retrospectives/2025-retrospective/keroro-spotlight.jpg"><img src="/retrospectives/2025-retrospective/keroro-spotlight.jpg" alt="조명 아래 홀로 서 있는 케로로" width="736" height="552" loading="lazy" /></a>
+</figure>
+
 퇴사가 후련하기만 했던 것은 아니였다. 사용자 반응이 좋고 개선할 과제가 보일수록 “이 서비스, 더 해 보고 싶은데...”라는 아쉬움이 컸다. 함께하고 싶은 동료들과 애정했던 프로덕트를 떠나는 일은 여전히 이 글을 작성하는 지금까지도 속상하다. 그래도 다시 돌아간다고 해도 나의 속도를 지키기로 한 선택은 존중하고 싶다. 미련은 남지만, 많이 배우고 온 좋은 이별이었다고 생각한다.
+
+
 
 ### 다음으로 가져갈 것들
 
@@ -121,3 +127,7 @@ tags: ["일년회고"]
 매년 회고를 작성하며 돌아볼 때마다 마지막 문단은 항상 '사람'이었다.
 올 한해도 좋은 사람들을 만나 한단계 성장할 수 있었고, 항상 든든한 친구들 덕분에 또 벼텼고 행복했다.\
 20춘기라고 불리는 이 위태로웠던 시기가 내년에는 평화로운 결말을 맺고 다음 챕터로 넘어갈 준비가 되었으면 좋겠다.
+
+<figure style="max-width: 400px; margin-inline: auto;">
+  <a href="/retrospectives/2025-retrospective/life-keeps-going.png"><img src="/retrospectives/2025-retrospective/life-keeps-going.png" alt="망할 듯 망할 듯 망하지 않는 것이 바로 인생입니다" width="400" height="300" loading="lazy" /></a>
+</figure>

@@ -132,30 +132,23 @@ CTO님께서 계약직으로 남아달라고 하셨던 말도 자꾸 떠올랐�
 
 ## 2022년을 보내며 가장 와닿았던 짤 ..
 
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-01.webp"><img src="/retrospectives/2022-retrospective/image-01.webp" alt="2022년 회고 첨부 이미지 1" width="828" height="1792" loading="lazy" /></a>
-</figure>
-
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-02.webp"><img src="/retrospectives/2022-retrospective/image-02.webp" alt="2022년 회고 첨부 이미지 2" width="828" height="1792" loading="lazy" /></a>
-</figure>
-
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-03.webp"><img src="/retrospectives/2022-retrospective/image-03.webp" alt="2022년 회고 첨부 이미지 3" width="828" height="1792" loading="lazy" /></a>
-</figure>
-
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-04.webp"><img src="/retrospectives/2022-retrospective/image-04.webp" alt="2022년 회고 첨부 이미지 4" width="828" height="1792" loading="lazy" /></a>
-</figure>
-
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-05.webp"><img src="/retrospectives/2022-retrospective/image-05.webp" alt="2022년 회고 첨부 이미지 5" width="828" height="1792" loading="lazy" /></a>
-</figure>
-
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-06.webp"><img src="/retrospectives/2022-retrospective/image-06.webp" alt="2022년 회고 첨부 이미지 6" width="828" height="1792" loading="lazy" /></a>
-</figure>
-
-<figure>
-  <a href="/retrospectives/2022-retrospective/image-07.webp"><img src="/retrospectives/2022-retrospective/image-07.webp" alt="2022년 회고 첨부 이미지 7" width="828" height="1792" loading="lazy" /></a>
-</figure>
+<div class="image-row" style="grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start;">
+  <figure>
+    <a href="/retrospectives/2022-retrospective/image-01.webp"><img src="/retrospectives/2022-retrospective/image-01.webp" alt="2022년 회고 첨부 이미지 1" width="828" height="1792" loading="lazy" style="aspect-ratio: auto; height: auto;" /></a>
+  </figure>
+  <figure>
+    <a href="/retrospectives/2022-retrospective/image-02.webp"><img src="/retrospectives/2022-retrospective/image-02.webp" alt="2022년 회고 첨부 이미지 2" width="828" height="1792" loading="lazy" style="aspect-ratio: auto; height: auto;" /></a>
+  </figure>
+  <figure>
+    <a href="/retrospectives/2022-retrospective/image-03.webp"><img src="/retrospectives/2022-retrospective/image-03.webp" alt="2022년 회고 첨부 이미지 3" width="828" height="1792" loading="lazy" style="aspect-ratio: auto; height: auto;" /></a>
+  </figure>
+  <figure>
+    <a href="/retrospectives/2022-retrospective/image-04.webp"><img src="/retrospectives/2022-retrospective/image-04.webp" alt="2022년 회고 첨부 이미지 4" width="828" height="1792" loading="lazy" style="aspect-ratio: auto; height: auto;" /></a>
+  </figure>
+  <figure>
+    <a href="/retrospectives/2022-retrospective/image-05.webp"><img src="/retrospectives/2022-retrospective/image-05.webp" alt="2022년 회고 첨부 이미지 5" width="828" height="1792" loading="lazy" style="aspect-ratio: auto; height: auto;" /></a>
+  </figure>
+  <figure>
+    <a href="/retrospectives/2022-retrospective/image-07.webp"><img src="/retrospectives/2022-retrospective/image-07.webp" alt="2022년 회고 첨부 이미지 7" width="828" height="1792" loading="lazy" style="aspect-ratio: auto; height: auto;" /></a>
+  </figure>
+</div>
