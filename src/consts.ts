@@ -11,6 +11,5 @@ export const BLOG_ROOT_FOLDERS = ['infra', 'recsys', '책', '회고'] as const;
 
 export const NAV = [
   { href: '/', label: 'Posts' },
-  { href: '/tags/', label: 'Tags' },
   { href: '/about/', label: 'About' },
 ] as const;

@@ -3,6 +3,7 @@ import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import PostToc from '../../components/PostToc.astro';
+import PostComments from '../../components/PostComments.astro';
 import '../../styles/post-content.css';
 
 export async function getStaticPaths() {
@@ -45,7 +46,7 @@ const sections = headings.filter((heading) => heading.depth === 2);
             <ul class="tag-row">
               {post.data.tags.map((tag) => (
                 <li>
-                  <a href={`/tags/${tag}/`}>{tag}</a>
+                  <span>{tag}</span>
                 </li>
               ))}
             </ul>
@@ -71,6 +72,7 @@ const sections = headings.filter((heading) => heading.depth === 2);
       <div class="prose post-content">
         <Content />
       </div>
+      <PostComments />
     </article>
   </div>
 

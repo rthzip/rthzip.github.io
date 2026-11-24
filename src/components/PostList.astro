@@ -52,7 +52,7 @@ const haystack = (post: CollectionEntry<'blog'>) =>
                 <ul class="tag-row">
                   {post.data.tags.map((tag) => (
                     <li>
-                      <a href={`/tags/${tag}/`}>{tag}</a>
+                      <span>{tag}</span>
                     </li>
                   ))}
                 </ul>
@@ -171,11 +171,11 @@ const haystack = (post: CollectionEntry<'blog'>) =>
     list-style: none;
   }
 
-  .tag-row a {
+  .tag-row span {
     font-size: 0.78rem;
   }
 
-  .tag-row a::before { content: '#'; margin-right: 0.1rem; }
+  .tag-row span::before { content: '#'; margin-right: 0.1rem; }
 
   .void {
     padding-block: 2rem;

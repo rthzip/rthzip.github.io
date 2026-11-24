@@ -1,0 +1,78 @@
+<section class="post-comments" aria-labelledby="comments-title">
+  <h2 id="comments-title">댓글</h2>
+  <div
+    class="giscus"
+    data-post-comments
+    data-repo="rthzip/rthzip.github.io"
+    data-repo-id="R_kgDOVvKBdw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOVvKBd84DL4vJ"
+  ></div>
+</section>
+
+<script>
+  const mount = document.querySelector<HTMLElement>('[data-post-comments]');
+
+  if (mount) {
+    const origin = 'https://giscus.app';
+    const theme = () => document.documentElement.dataset.theme === 'dark' ? 'dark_dimmed' : 'light';
+    const script = document.createElement('script');
+    script.src = `${origin}/client.js`;
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+
+    const options = {
+      repo: mount.dataset.repo!,
+      repoId: mount.dataset.repoId!,
+      category: mount.dataset.category!,
+      categoryId: mount.dataset.categoryId!,
+      mapping: 'pathname',
+      strict: '1',
+      reactionsEnabled: '1',
+      emitMetadata: '0',
+      inputPosition: 'top',
+      theme: theme(),
+      lang: 'ko',
+      loading: 'lazy',
+    };
+
+    for (const [key, value] of Object.entries(options)) {
+      script.dataset[key] = value;
+    }
+
+    const syncTheme = () => {
+      const current = theme();
+      script.dataset.theme = current;
+      const frame = mount.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+      frame?.contentWindow?.postMessage({ giscus: { setConfig: { theme: current } } }, origin);
+    };
+
+    mount.addEventListener('load', syncTheme, true);
+    new MutationObserver(syncTheme).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+    mount.append(script);
+  }
+</script>
+
+<style>
+  .post-comments {
+    grid-column: 1;
+    min-width: 0;
+    width: 100%;
+    max-width: var(--measure);
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .post-comments h2 {
+    margin: 0 0 1rem;
+    font-size: 1.125rem;
+  }
+
+  @media print {
+    .post-comments { display: none; }
+  }
+</style>

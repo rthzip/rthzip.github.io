@@ -260,10 +260,6 @@ samp {
   color: var(--accent-muted);
 }
 
-.tag-row a:hover {
-  color: var(--accent);
-}
-
 /* ── 모션 ─────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
